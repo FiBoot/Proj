@@ -1,0 +1,95 @@
+.searchfield {
+	float:left;
+	width:377px;
+	margin-right:25px;
+}
+.searchfield input[name=cardname] {
+	display:inline;
+	width:223px;
+	margin:7px 15px 0 0;
+	padding:0 5px;
+	color:#F93;
+}
+.searchfield input[name=count] {
+	display:inline;
+	width:135px;
+	margin:0;
+	text-align:center;
+	color:#F93;
+}
+.searchfield select#result {
+	width:377px;
+	margin:20px 0 4px;
+	padding:1px 0;
+	border:1px solid #333;
+}
+
+.cardfield {
+	width:223px;
+}
+.cardfield img {
+	width: 223px;
+	height: 310px;
+	border-radius:8px;
+	
+}
+.cardfield input {
+	width:213px;
+	margin:15px 5px 0;
+	cursor:pointer;
+}
+
+.deckfield {
+	width:665px;
+	margin-top:20px;
+}
+
+.deckfield div.card {
+	float:left;
+	width:100px;
+	margin:5px;
+}
+.deckfield div img {
+	width:100px;
+	height:137px;
+	cursor:pointer;
+}
+.deckfield div div {
+	height:11px;
+	margin:0;
+	padding:2px 2px 0;
+	overflow:hidden;
+	font-size:10px;
+	font-weight:bold;
+	text-align:center;
+}
+.deckfield div input {
+	display:inline;
+	width:30px;
+	height:20px;
+	margin:4px 10px 0;
+	padding:0;
+	text-align:center;
+}
+.deckfield div input[type=button] {font-weight:bold;}
+
+form {
+	display:inline-block;
+	margin:0;
+	padding:20px 10px 10px;
+}
+form input {
+	height:28px;
+}
+form input[type=text] {
+	display:inline;
+	width:237px;
+	padding:0 5px;
+	color:#F93;
+}
+form input[type=submit], form input[type=button] {
+	display:inline;
+	width:120px;
+	margin-left:20px;
+}
+

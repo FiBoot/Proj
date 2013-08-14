@@ -1,0 +1,12 @@
+.error {
+	text-align:center;
+	color:crimson;
+}
+
+form {
+	display:table;
+	width:350px;
+	margin:10px auto;
+}
+
+td { padding:0 10px; }
