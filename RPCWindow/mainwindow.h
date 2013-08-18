@@ -4,6 +4,8 @@
 #include        <QMainWindow>
 #include        <iostream>
 #include        "logwindow.h"
+#include 		"server.h"
+#include 		"client.h"
 
 namespace Ui {
     class MainWindow;
@@ -31,6 +33,9 @@ private slots:
 private:
     Ui::MainWindow  *ui;
     LogWindow       *logWindow;
+    Server  		server;
+    Client  		client;
+    int     		port;
 };
 
 #endif // MAINWINDOW_H

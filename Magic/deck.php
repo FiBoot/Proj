@@ -56,25 +56,8 @@ mysql_close($link);
 				for (var i = 0; i < deck.length; i++)
 				{
 					var tmp		= deck[i].split("=");
-					var	title	= cards[tmp[0] - cards[0][0]][1];
-					$("#deck").append(
-						"<div class=\"card\" id=\""+ tmp[0] +"\">"+
-							"<img src=\"http://gatherer.wizards.com/Handlers/Image.ashx?type=card&name="+ title.replace(" ", "%20") +"\" />"+
-							"<input type=\"text\" value=\""+ tmp[1] +"\" />"+
-							"<input type=\"button\" value=\"X\" />"+
-							"<div>"+ title +"</div>"+
-						"</div>"
-					);
+					addcard(tmp[0], cards[tmp[0] - cards[0][0]][1], tmp[1]);
 				}
-				$(".card input[type=button]").click(function() { $(this).parent().remove(); });
-				$(".card input[type=text]").keyup(function()
-				{
-					if ($(this).val().length > 0)
-						$(this).val((parseInt($(this).val()) > 0) ? parseInt($(this).val()) : 1);
-				});
-				$(".card img").hover(
-					function() { $("#card").attr("src", $(this).attr("src")); },
-					function() { $("#card").attr("src", "http://gatherer.wizards.com/Handlers/Image.ashx?type=card&name="+ $("#card").attr("title").replace(" ", "%20")); });
 			}
 			
 		});
@@ -136,7 +119,8 @@ mysql_close($link);
 		// display card
 		$("#result").change(function()
 		{
-			$("#card").attr("src", "http://gatherer.wizards.com/Handlers/Image.ashx?type=card&name=0"); // load gif ?
+			$(".card.selected").removeClass("selected");
+			$("#card").attr("src", "http://gatherer.wizards.com/Handlers/Image.ashx?type=card&name=0"); // local load gif ?
 			$("#result option:selected").each(function()
 			{
 				$("#card").attr("title", $(this).text());
@@ -150,34 +134,12 @@ mysql_close($link);
 		// add card to deck
 		$("#add").click(function()
 		{
-			$("#result option:selected").each(function()
+			if ($(".card#"+ $("#card").attr("value")).length)
 			{
-				if ($(".card#"+ $(this).val()).length)
-				{
-					$(".card#"+ $(this).val() +" input[type=text]").val(parseInt($(".card#"+ $(this).val() +" input[type=text]").val()) + 1);
-					 return;
-				}
-				
-				var card	= $("#card").attr("title").replace(" ", "%20");
-				$("#deck").append(
-					"<div class=\"card\" id=\""+ $(this).val() +"\">"+
-						"<img src=\"http://gatherer.wizards.com/Handlers/Image.ashx?type=card&name="+ card +"\" />"+
-						"<input type=\"text\" value=\"1\" />"+
-						"<input type=\"button\" value=\"X\" />"+
-						"<div>"+ $(this).text() +"</div>"+
-					"</div>"
-				);
-				
-				$(".card input[type=button]").click(function() { $(this).parent().remove(); });
-				$(".card input[type=text]").keyup(function()
-				{
-					if ($(this).val().length > 0)
-						$(this).val((parseInt($(this).val()) > 0) ? parseInt($(this).val()) : 1);
-				});
-				$(".card img").hover(
-					function() { $("#card").attr("src", $(this).attr("src")); },
-					function() { $("#card").attr("src", "http://gatherer.wizards.com/Handlers/Image.ashx?type=card&name="+ $("#card").attr("title").replace(" ", "%20")); });
-			});
+				$(".card#"+ $("#card").attr("value") +" input[type=text]").val(parseInt($(".card#"+ $("#card").attr("value") +" input[type=text]").val()) + 1);
+				return;
+			}
+			addcard($("#card").attr("value"), $("#card").attr("title"), 1);
 		});
 		
 		
@@ -193,6 +155,34 @@ mysql_close($link);
 			$("form input[name=deck]").val(deck);
 			return true;
 		});
+		
+		
+		//add card
+		function addcard(id, cardname, count)
+		{
+			$("#deck").append(
+				"<div class=\"card\" id=\""+ id +"\">"+
+					"<img src=\"http://gatherer.wizards.com/Handlers/Image.ashx?type=card&name="+ cardname.replace(" ", "%20") +"\" />"+
+					"<input type=\"text\" value=\""+ count +"\" />"+
+					"<input type=\"button\" value=\"X\" />"+
+					"<div>"+ cardname +"</div>"+
+				"</div>"
+			);
+				
+			$(".card input[type=button]").click(function() { $(this).parent().remove(); });
+			$(".card input[type=text]").keyup(function()
+			{
+				if ($(this).val().length > 0)
+					$(this).val((parseInt($(this).val()) > 0) ? parseInt($(this).val()) : 1);
+			});
+			$(".card img").click(function()
+			{
+				$(".card.selected").removeClass("selected");
+				$("#card").attr('src', $(this).attr('src'));
+				$("#card").attr("value", $(this).parent().attr("id"));
+				$(this).parent().addClass("selected");
+			});
+		}
 		
 	});
 	</script>

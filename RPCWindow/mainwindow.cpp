@@ -6,7 +6,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
     ui->groupServer->hide();
     ui->groupClient->hide();
+	
     logWindow   = NULL;
+    port 		= 4242;
 }
 
 MainWindow::~MainWindow()
@@ -18,10 +20,9 @@ MainWindow::~MainWindow()
 // private slots
 void                MainWindow::on_launchServerButton_clicked()
 {
-
-
     ui->groupButton->hide();
     ui->groupServer->show();
+    server.launchServer(port);
 }
 
 void                MainWindow::on_connectionButton_clicked()
@@ -62,6 +63,5 @@ void                MainWindow::connection(QString login, QString ip)
 {
     ui->groupButton->hide();
     ui->groupClient->show();
-    std::cout << "connection: " << qPrintable(login) << "\n\tip: " << qPrintable(ip) << std::endl;
+    client.startClient(ip, port);
 }
-
