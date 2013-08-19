@@ -6,6 +6,7 @@
 #include        "logwindow.h"
 #include 		"server.h"
 #include 		"client.h"
+#include		"fileinfo.h"
 
 namespace Ui {
     class MainWindow;

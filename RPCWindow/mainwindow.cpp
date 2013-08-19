@@ -23,6 +23,17 @@ void                MainWindow::on_launchServerButton_clicked()
     ui->groupButton->hide();
     ui->groupServer->show();
     server.launchServer(port);
+	
+	// list files
+	std::vector<FileInfo *> files	= listFiles();
+    for (std::vector<FileInfo *>::iterator it = files.begin();it != files.end(); ++it)
+    {
+        std::cout << "name: " << qPrintable((*it)->getName()) << std::endl;
+        std::cout << "size: " << (*it)->getSize() << std::endl;
+        std::cout << "lastModified: " << qPrintable((*it)->getLastModified().toString()) << std::endl;
+        std::cout << std::endl;
+    }
+	
 }
 
 void                MainWindow::on_connectionButton_clicked()

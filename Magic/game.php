@@ -22,6 +22,7 @@ mysql_close($link);
 <head>
 	<title>Play</title>
 	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="game.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function()
@@ -31,10 +32,25 @@ mysql_close($link);
 		// update function
 		function loop()
 		{
-			$.post("jpost.php", {action: "update_game"}).done(function(data)
+			$.post("jpost.php", {
+				action: "update_game"
+			}).done(function(data)
 			{
-				alert(data);
+				//alert(data);
 			});
+		}
+		
+		$("form").submit(function()
+		{
+			
+			$.post("jpost.php", {
+				action: "send_text",
+				text:	$("input[name=text]").val()
+			}.done(function(data)
+			{
+				$("#chatarea").val(data);
+			});
+			return false;
 		}
 		
 	});
@@ -51,6 +67,16 @@ mysql_close($link);
 		
 		<div class="content">
 			<a href="gamelist.php"><input type="submit" name="new" class="dark" value="Quitter la partie" /></a>
+			
+			<div class="gameboard">
+			
+			</div>
+			
+			<textarea id="chatarea" readonly="1"></textarea>
+			<form>
+				<input type="text" name="chat" />
+				<input type="sumbit" value="Envoyer" />
+			</form>
 		</div>
 	
 		<div class="footer">
