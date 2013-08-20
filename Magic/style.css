@@ -2,7 +2,7 @@ body {
 	margin:0;
 	padding:0;
 	font-family:sans-serif;
-	background:url("background.jpg") center no-repeat fixed #666;
+	background:url("background.jpga") center no-repeat fixed #666;
 }
 
 form {
@@ -28,7 +28,12 @@ input.dark {
 }
 input:hover {	color:#F93; }
 input:active { border-color:#F93; }
-input[type=button], input[type=submit] {text-align:center;}
+input[type=text] { cursor:text; }
+input[type=button] {text-align:center;}
+input[type=submit] {
+	margin:0 5px;
+	text-align:center;
+}
 
 fieldset {
 	border:1px solid #333;

@@ -2,7 +2,7 @@
 session_start();
 include_once "sql.php";
 
-if (!isset($_SESSION["id"])) { header('Location: index.php'); }
+if (!isset($_SESSION["id"]) || !isset($_POST["game_id"])) { header('Location: index.php'); }
 
 $link		= bdd_connect();
 
@@ -24,33 +24,70 @@ mysql_close($link);
 	<link rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="game.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="jquery-ui-1.10.3.custom.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function()
 	{
-		var intervalId	= setInterval(function(){loop()}, 3000);
+		var sending			= false;
+		var account_id		= <?=$_SESSION["id"]?>;
+		var	game_id			= <?=$_POST["game_id"]?>;
+		
+		var gameInterval	= setInterval(function() { gameUpdate() }, 3000);
+		var logInterval		= setInterval(function() { logUpdate() }, 1500);
+		
+		sendLog("game", account_id +" a rejoint la partie");
 		
 		// update function
-		function loop()
+		function gameUpdate()
 		{
 			$.post("jpost.php", {
-				action: "update_game"
+				action: 	"update_game"
 			}).done(function(data)
 			{
 				//alert(data);
 			});
 		}
 		
+		function logUpdate()
+		{
+			$.post("jpost.php", {
+				action: 	"update_log",
+				game_id:	game_id
+			}).done(function(data)
+			{
+				$("ul#log").html(data);
+				$("input[name=chat]").removeClass("dark");
+				sending		= false;
+			});
+		}
+		
 		$("form").submit(function()
 		{
+			if ($("input[name=chat]").val().length > 0 && !sending)
+			{
+				sendLog("chat", $("input[name=chat]").val());
+				$("input[name=chat]").val("");
+			}
+			return false;
+		});
+		
+		function sendLog(log_type, log)
+		{
+			sending		= true;
+			$("input[name=chat]").addClass("dark");
 			
 			$.post("jpost.php", {
-				action: "send_text",
-				text:	$("input[name=text]").val()
-			}.done(function(data)
+				action: 	"send_log",
+				game_id:	game_id,
+				account_id:	account_id,
+				log_type:	log_type,
+				log:		log
+			}).done(function()
 			{
-				$("#chatarea").val(data);
+				clearInterval(logInterval);
+				logUpdate();
+				logInterval		= setInterval(function() { logUpdate() }, 1500);
 			});
-			return false;
 		}
 		
 	});
@@ -72,10 +109,11 @@ mysql_close($link);
 			
 			</div>
 			
-			<textarea id="chatarea" readonly="1"></textarea>
-			<form>
+			<ul id="log"></ul>
+			
+			<form method="post" action="game.php">
 				<input type="text" name="chat" />
-				<input type="sumbit" value="Envoyer" />
+				<input type="submit" value="Envoyer" />
 			</form>
 		</div>
 	

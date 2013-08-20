@@ -56,7 +56,7 @@ mysql_close($link);
 				for (var i = 0; i < deck.length; i++)
 				{
 					var tmp		= deck[i].split("=");
-					addcard(tmp[0], cards[tmp[0] - cards[0][0]][1], tmp[1]);
+					addCard(tmp[0], cards[tmp[0] - cards[0][0]][1], tmp[1]);
 				}
 			}
 			
@@ -139,7 +139,7 @@ mysql_close($link);
 				$(".card#"+ $("#card").attr("value") +" input[type=text]").val(parseInt($(".card#"+ $("#card").attr("value") +" input[type=text]").val()) + 1);
 				return;
 			}
-			addcard($("#card").attr("value"), $("#card").attr("title"), 1);
+			addCard($("#card").attr("value"), $("#card").attr("title"), 1);
 		});
 		
 		
@@ -158,7 +158,7 @@ mysql_close($link);
 		
 		
 		//add card
-		function addcard(id, cardname, count)
+		function addCard(id, cardname, count)
 		{
 			$("#deck").append(
 				"<div class=\"card\" id=\""+ id +"\">"+

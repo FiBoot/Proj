@@ -1,0 +1,39 @@
+
+div.gameboard {
+	width:696px;
+	height:500px;
+	margin:20px auto;
+	border:2px solid #333;
+	border-radius:4px;
+	background-color: #999;
+}
+
+ul#log {
+	width:698px;
+	height:150px;
+	margin:0;
+	padding:0;
+	border:1px solid #333;
+	background:#FFF;
+	overflow-x:hidden;
+	overflow-y:scroll;
+	list-style-type:none;
+	font-size:12px;
+}
+li { padding:3px 5px; }
+li span { font-weight:bold; }
+li.game {
+	font-style:italic;
+	color:#555;
+}
+li.log {
+	font-style:italic;
+	color:#C00;
+}
+
+input { display:inline; }
+input[type=submit] { margin:0; }
+input[name=chat] {
+	width:540px;
+	margin-right:6px;
+}
