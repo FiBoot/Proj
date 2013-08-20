@@ -29,11 +29,7 @@ input.dark {
 input:hover {	color:#F93; }
 input:active { border-color:#F93; }
 input[type=text] { cursor:text; }
-input[type=button] {text-align:center;}
-input[type=submit] {
-	margin:0 5px;
-	text-align:center;
-}
+input[type=button], input[type=submit] {text-align:center;}
 
 fieldset {
 	border:1px solid #333;
