@@ -6,8 +6,7 @@ if (isset($_POST["login"]))
 {
 	$link	= bdd_connect();
 	
-	$sql	= "SELECT * FROM `magic_accounts` WHERE `login` = \"". addslashes($_POST["login"]) ."\" AND `password` = \"". addslashes($_POST["password"]) ."\"";
-	$req	= mysql_query($sql);
+	$req	= query("SELECT * FROM `magic_accounts` WHERE `login` = \"". addslashes($_POST["login"]) ."\" AND `password` = \"". addslashes($_POST["password"]) ."\"");
 	
 	if (mysql_num_rows($req) == 1)
 	{
@@ -15,7 +14,7 @@ if (isset($_POST["login"]))
 		$_SESSION["id"]	= $data["id"];
 	}
 	
-	mysql_close($link);
+	close($link);
 }
 ?>
 

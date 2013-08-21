@@ -9,12 +9,12 @@ $deck_id		= (isset($_POST["edit"]) && $_POST["id"] > 0) ? $_POST["id"] : 0;
 
 if ($deck_id > 0)
 {
-	$sql		= "SELECT * FROM `magic_decks` WHERE `id` = ". $deck_id;
-	$data		= mysql_fetch_array(mysql_query($sql));
+	$req		= query("SELECT * FROM `magic_decks` WHERE `id` = ". $deck_id .";");
+	$data		= mysql_fetch_array($req);
 	
 	if ($data["account_id"] != $_SESSION["id"])
 	{
-		mysql_close();
+		close($link);
 		header('Location: index.php');
 	}
 	$deck		= $data["cards"];
@@ -22,7 +22,7 @@ if ($deck_id > 0)
 	
 } else { $deckname	= "Nom du deck"; }
 
-mysql_close($link);
+close($link);
 ?>
 
 <head>

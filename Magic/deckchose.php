@@ -7,12 +7,11 @@ if (!isset($_SESSION["id"])) { header('Location: index.php'); }
 
 $link		= bdd_connect();
 
-$sql		= "SELECT * FROM `magic_decks` WHERE `account_id` = ". $_SESSION["id"];
-$req 		= mysql_query($sql);
+$req 		= query("SELECT * FROM `magic_decks` WHERE `account_id` = ". $_SESSION["id"]);
 
 $game_id	= ($_POST["game_id"] > 0) ? $_POST["game_id"] : 0;
 
-mysql_close($link);
+close($link);
 ?>
 
 <head>

@@ -5,12 +5,12 @@ $link	= bdd_connect();
 
 if (isset($_POST["register"]))
 {
-	$sql		= "SELECT * FROM `magic_accounts` WHERE `login` = \"". addslashes($_POST["login"]) ."\"";
-	if (mysql_num_rows(mysql_query($sql)))
+	$req		= query("SELECT * FROM `magic_accounts` WHERE `login` = \"". addslashes($_POST["login"]) ."\"");
+	if (mysql_num_rows($req))
 		$error	= "Pseudo déjà utilisé";
 	
-	$sql		= "SELECT * FROM `magic_accounts` WHERE `email` = \"". addslashes($_POST["email"]). "\"";
-	if (mysql_num_rows(mysql_query($sql)))
+	$req		= query("SELECT * FROM `magic_accounts` WHERE `email` = \"". addslashes($_POST["email"]). "\"");
+	if (mysql_num_rows($req))
 	{
 		$error 	.= (isset($error)) ? ", " : "";
 		$error	.= "Email déjà utilisé";
@@ -18,10 +18,13 @@ if (isset($_POST["register"]))
 	
 	if (!isset($error))
 	{
-		$sql 	= "INSERT INTO `magic_accounts` (login, password, email) VALUES (\"". addslashes($_POST["login"]) ."\", \"". addslashes($_POST["password"]) ."\", \"". addslashes($_POST["email"]) ."\")";
-		mysql_query($sql);
+		// ...
+		mysql_query("INSERT INTO `magic_accounts` (login, password, email) VALUES (\"". addslashes($_POST["login"]) ."\", \"". addslashes($_POST["password"]) ."\", \"". addslashes($_POST["email"]) ."\")");
+		close($link);
 		header('Location: index.php');
 	}
+	
+close($link);
 }
 ?>
 

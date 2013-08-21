@@ -6,11 +6,9 @@ if (!isset($_SESSION["id"])) { header('Location: index.php'); }
 
 $link		= bdd_connect();
 
+$req 		= query("SELECT * FROM `magic_games` WHERE `active` = 1;");
 
-$sql		= "SELECT * FROM `magic_games` WHERE `active` = 1;";
-$req 		= mysql_query($sql);
-
-mysql_close($link);
+close($link);
 ?>
 
 <head>

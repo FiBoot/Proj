@@ -4,19 +4,17 @@ include_once "sql.php";
 
 if (!isset($_SESSION["id"]) || !isset($_POST["game_id"])) { header('Location: index.php'); }
 
-$link		= bdd_connect();
+$link	= bdd_connect();
 
-
-if ($_POST["game_id"] > 0)
+if (!isset($_POST["spectator"]))
 {
-	$sql	= "UPDATE `magic_games` SET `oppenent_account_id` = ". $_SESSION["id"] .", `oppenent_deck_id` = ". $_POST["deck_id"] ." WHERE `id` = ". $_POST["game_id"] .";";
-	mysql_query($sql);
-} else if ($_POST["deck_id"] > 0) {
-	$sql	= "INSERT INTO `magic_games` (`creator_account_id`, `creator_deck_id`, `date`, `active`) VALUES (". $_SESSION["id"] .", ". $_POST["deck_id"] .", \"". date('Y-m-j H:i:s') ."\", 1);";
-	mysql_query($sql);
+	$sql 	= ($_POST["game_id"] > 0) ?
+		"UPDATE `magic_games` SET `oppenent_account_id` = ". $_SESSION["id"] .", `oppenent_deck_id` = ". $_POST["deck_id"] ." WHERE `id` = ". $_POST["game_id"] .";":
+		"INSERT INTO `magic_games` (`creator_account_id`, `creator_deck_id`, `active`) VALUES (". $_SESSION["id"] .", ". $_POST["deck_id"] .", 1);";
+	query($sql);
 }
 
-mysql_close($link);
+close($link);
 ?>
 
 <head>
@@ -35,7 +33,7 @@ mysql_close($link);
 		var gameInterval	= setInterval(function() { gameUpdate() }, 3000);
 		var logInterval		= setInterval(function() { logUpdate() }, 1500);
 		
-		sendLog("game", account_id +" a rejoint la partie");
+		sendLog("game", account_id +" a rejoint la partie", 1);
 		
 		// update function
 		function gameUpdate()
@@ -65,13 +63,13 @@ mysql_close($link);
 		{
 			if ($("input[name=chat]").val().length > 0 && !sending)
 			{
-				sendLog("chat", $("input[name=chat]").val());
+				sendLog("chat", $("input[name=chat]").val(), 0);
 				$("input[name=chat]").val("");
 			}
 			return false;
 		});
 		
-		function sendLog(log_type, log)
+		function sendLog(log_type, log, first)
 		{
 			sending		= true;
 			$("input[name=chat]").addClass("dark");
@@ -79,11 +77,12 @@ mysql_close($link);
 			$.post("jpost.php", {
 				action: 	"send_log",
 				game_id:	game_id,
-				account_id:	account_id,
 				log_type:	log_type,
-				log:		log
-			}).done(function()
+				log:		log,
+				first:		first
+			}).done(function(data)
 			{
+				//? data -> error
 				clearInterval(logInterval);
 				logUpdate();
 				logInterval		= setInterval(function() { logUpdate() }, 1500);
