@@ -8,10 +8,14 @@ $link	= bdd_connect();
 
 if (!isset($_POST["spectator"]))
 {
-	$sql 	= ($_POST["game_id"] > 0) ?
+	query(($_POST["game_id"] > 0) ?
 		"UPDATE `magic_games` SET `oppenent_account_id` = ". $_SESSION["id"] .", `oppenent_deck_id` = ". $_POST["deck_id"] ." WHERE `id` = ". $_POST["game_id"] .";":
-		"INSERT INTO `magic_games` (`creator_account_id`, `creator_deck_id`, `active`) VALUES (". $_SESSION["id"] .", ". $_POST["deck_id"] .", 1);";
-	query($sql);
+		"INSERT INTO `magic_games` (`creator_account_id`, `creator_deck_id`, `active`) VALUES (". $_SESSION["id"] .", ". $_POST["deck_id"] .", 1);"
+	);
+	
+	$req	= query("SELECT `id` FROM `magic_games` WHERE `creator_account_id` = ". $_SESSION["id"] ." ORDER BY `id` DESC;");
+	$data	= mysql_fetch_array($req);
+	$_POST["game_id"]	= $data["id"];
 }
 
 close($link);
@@ -26,30 +30,29 @@ close($link);
 	<script type="text/javascript">
 	$(document).ready(function()
 	{
-		var sending			= false;
+		var sending			= true;
 		var account_id		= <?=$_SESSION["id"]?>;
 		var	game_id			= <?=$_POST["game_id"]?>;
+		var logInterval;
+		var statusInterval;
 		
-		var gameInterval	= setInterval(function() { gameUpdate() }, 3000);
-		var logInterval		= setInterval(function() { logUpdate() }, 1500);
 		
-		sendLog("game", account_id +" a rejoint la partie", 1);
+		updateLoop();
 		
-		// update function
-		function gameUpdate()
+		function updateLoop()
 		{
-			$.post("jpost.php", {
-				action: 	"update_game"
-			}).done(function(data)
-			{
-				//alert(data);
-			});
+			clearInterval(statusInterval);
+			clearInterval(logInterval);
+			updateStatus();
+			getLogs();
+			var statusInterval	= setInterval(function() { updateStatus() }, 1500);
+			var logInterval		= setInterval(function() { getLogs() }, 1500);
 		}
 		
-		function logUpdate()
+		function getLogs()
 		{
 			$.post("jpost.php", {
-				action: 	"update_log",
+				action: 	"get_logs",
 				game_id:	game_id
 			}).done(function(data)
 			{
@@ -59,17 +62,39 @@ close($link);
 			});
 		}
 		
-		$("form").submit(function()
+		function updateStatus()
 		{
-			if ($("input[name=chat]").val().length > 0 && !sending)
+			var	startTime 		= new Date().getTime();
+			var elapsedTime 	= 0;
+			
+			$.post("jpost.php", {
+				action: 	"update_game_status",
+				game_id:	game_id
+			}).done(function(data)
 			{
-				sendLog("chat", $("input[name=chat]").val(), 0);
-				$("input[name=chat]").val("");
-			}
-			return false;
-		});
+				elapsedTime 	= new Date().getTime() - startTime;
+				$("#requestime").removeClass("good").removeClass("normal").removeClass("bad")
+					
+				if (elapsedTime <= 50)
+					$("#requestime").addClass("good");
+				if (elapsedTime > 50 && elapsedTime <= 100)
+					$("#requestime").addClass("normal");
+				if (elapsedTime > 100)
+					$("#requestime").addClass("bad");
+				$("#requestime").html(elapsedTime);
+				
+				if (data == "game over")
+				{
+					clearInterval(statusInterval);
+					clearInterval(logInterval);
+					sending		= true;
+					$("input[name=chat]").addClass("dark");
+					alert("Partie termin\u00e9e");
+				}
+			});
+		}
 		
-		function sendLog(log_type, log, first)
+		function sendLog(log_type, log)
 		{
 			sending		= true;
 			$("input[name=chat]").addClass("dark");
@@ -78,16 +103,24 @@ close($link);
 				action: 	"send_log",
 				game_id:	game_id,
 				log_type:	log_type,
-				log:		log,
-				first:		first
+				log:		log
 			}).done(function(data)
 			{
 				//? data -> error
-				clearInterval(logInterval);
-				logUpdate();
-				logInterval		= setInterval(function() { logUpdate() }, 1500);
+				updateLoop();
 			});
 		}
+		
+		
+		$("form").submit(function()
+		{
+			if ($("input[name=chat]").val().length > 0 && !sending)
+			{
+				sendLog("chat", $("input[name=chat]").val());
+				$("input[name=chat]").val("");
+			}
+			return false;
+		});
 		
 	});
 	</script>
@@ -114,6 +147,9 @@ close($link);
 				<input type="text" name="chat" />
 				<input type="submit" value="Envoyer" />
 			</form>
+			
+			<div class="ping">ping: </span><span id="requestime"></div>
+			
 		</div>
 	
 		<div class="footer">

@@ -16,6 +16,17 @@ close($link);
 	<link rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="list.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function()
+	{
+	
+		var logInterval		= setInterval(function() { logUpdate() }, 1500);
+	
+			$.post("jpost.php", {
+				action: 	"update_status",
+	
+	});
+	</script>
 </head>
 
 <body>

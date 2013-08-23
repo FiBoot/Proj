@@ -37,3 +37,15 @@ input[name=chat] {
 	width:540px;
 	margin-right:6px;
 }
+
+div.ping {
+	margin-left:5px;
+	font-size:12px;
+	color:#555;
+}
+
+span { font-size:12px; }
+
+.good { color:#0C0;}
+.normal { color:#FE0; }
+.bad { color:#C00; }
