@@ -19,11 +19,42 @@ close($link);
 	<script type="text/javascript">
 	$(document).ready(function()
 	{
+		var statusInterval	= setInterval(function() { updateStatus() }, 1500);
+		var gameInterval	= setInterval(function() { listGames() }, 1500);
+		updateStatus();
+		listGames();
 	
-		var logInterval		= setInterval(function() { logUpdate() }, 1500);
 	
+		function updateStatus()
+		{
 			$.post("jpost.php", {
-				action: 	"update_status",
+				action:	"update_status"
+			}).done(function(data)
+			{
+			});
+		}
+	
+		function listGames()
+		{
+			$.post("jpost.php", {
+				action: 	"list_games"
+			}).done(function(data)
+			{
+				var html	= "";
+				var games	= data.split("|");
+				$.each(games, function(index, value) { games[index]	= value.split("-"); });
+				
+				for (var i = 0; i < games.length - 1; i++)
+				{
+					html	+= "<tr><td class=\"title\">"+ games[i][1] +" ("+ games[i][2] +")";
+					html	+= (games[i][3].length > 0) ?
+						"<span style=\"color:#F93\"> VS </span>"+ games[i][3] +" ("+ games[i][4] +")</td>":
+						"<td><form method=\"post\" action=\"deckchose.php\"><input type=\"hidden\" name=\"game_id\" value=\""+ games[i][0] +"\" /><input type=\"submit\" value=\"Rejoindre cette partie\" /></form></td>";
+					html	+= "<td><form method=\"post\" action=\"game.php\"><input type=\"hidden\" name=\"game_id\" value=\""+ games[i][0] +"\" /><input type=\"hidden\" name=\"spectator\" /><input type=\"submit\" value=\"Rejoindre en spectateur\" /></form></td></tr>";
+				}
+				$("table#list").html(html);
+			});
+		}
 	
 	});
 	</script>
@@ -45,35 +76,7 @@ close($link);
 			<fieldset>
 				<legend>Parties en cours</legend>
 				
-				<table>
-				
-					<?php while ($data = mysql_fetch_array($req)) { ?>
-					
-						<tr>
-							<td class="title"><?=$data["creator_account_id"] ." (". $data["creator_deck_id"] .")".
-								(($data["oppenent_account_id"] > 0) ? " <span style=\"color:#F93\">VS</span> ". $data["oppenent_account_id"] ." (". $data["oppenent_deck_id"] .")" : "")?></td>
-							
-							<?php if ($data["oppenent_account_id"] > 0) { ?><td></td><?php } else { ?>
-								<td>
-									<form method="post" action="deckchose.php">
-										<input type="hidden" name="game_id" value="<?=$data["id"]?>" />
-										<input type="submit" value="Rejoindre cette partie" />
-									</form>
-								</td>
-							<?php } ?>
-							
-							<td>
-								<form method="post" action="game.php">
-									<input type="hidden" name="game_id" value="<?=$data["id"]?>" />
-									<input type="hidden" name="spectator" />
-									<input type="submit" value="Rejoindre en spectateur" />
-								</form>
-							</td>
-						</tr>
-						
-					<?php } ?>
-					
-				</table>
+				<table id="list"></table>
 					
 			</fieldset>
 		

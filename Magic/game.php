@@ -13,7 +13,7 @@ if (!isset($_POST["spectator"]))
 		"INSERT INTO `magic_games` (`creator_account_id`, `creator_deck_id`, `active`) VALUES (". $_SESSION["id"] .", ". $_POST["deck_id"] .", 1);"
 	);
 	
-	$req	= query("SELECT `id` FROM `magic_games` WHERE `creator_account_id` = ". $_SESSION["id"] ." ORDER BY `id` DESC;");
+	$req	= query("SELECT `id` FROM `magic_games` WHERE (`creator_account_id` = ". $_SESSION["id"] ." OR `oppenent_account_id` = ". $_SESSION["id"] .")AND `active` = 1;");
 	$data	= mysql_fetch_array($req);
 	$_POST["game_id"]	= $data["id"];
 }
@@ -43,10 +43,10 @@ close($link);
 		{
 			clearInterval(statusInterval);
 			clearInterval(logInterval);
+			statusInterval	= setInterval(function() { updateStatus() }, 1500);
+			logInterval		= setInterval(function() { getLogs() }, 1500);
 			updateStatus();
 			getLogs();
-			var statusInterval	= setInterval(function() { updateStatus() }, 1500);
-			var logInterval		= setInterval(function() { getLogs() }, 1500);
 		}
 		
 		function getLogs()

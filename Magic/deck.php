@@ -45,7 +45,7 @@ close($link);
 		$.post("jpost.php", {action: "get_cards"}).done(function(data)
 		{
 			cards 	= data.split("|");
-			$.each(cards, function(index, value) { cards[index]	= value.split("="); });
+			$.each(cards, function(index, value) { cards[index]	= value.split("-"); });
 			$('input[name=cardname]')
 				.attr('readonly', false)
 				.removeClass("dark");
@@ -55,7 +55,7 @@ close($link);
 				deck			= deck.split('|');
 				for (var i = 0; i < deck.length; i++)
 				{
-					var tmp		= deck[i].split("=");
+					var tmp		= deck[i].split("-");
 					addCard(tmp[0], cards[tmp[0] - cards[0][0]][1], tmp[1]);
 				}
 			}
@@ -150,7 +150,7 @@ close($link);
 			$(".card").each(function()
 			{
 				if (deck.length)	deck	+= "|";
-				deck	+= $(this).attr("id") +"="+ $(this).children("input[type=text]")[0].value;
+				deck	+= $(this).attr("id") +"-"+ $(this).children("input[type=text]")[0].value;
 			});
 			$("form input[name=deck]").val(deck);
 			return true;
