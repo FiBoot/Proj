@@ -4,7 +4,7 @@ include_once "sql.php";
 
 if (!isset($_SESSION["id"]) || !isset($_POST["game_id"])) { header('Location: index.php'); }
 
-$link	= bdd_connect();
+$link			= bdd_connect();
 
 if (!isset($_POST["spectator"]))
 {
@@ -13,9 +13,16 @@ if (!isset($_POST["spectator"]))
 		"INSERT INTO `magic_games` (`creator_account_id`, `creator_deck_id`, `active`) VALUES (". $_SESSION["id"] .", ". $_POST["deck_id"] .", 1);"
 	);
 	
-	$req	= query("SELECT `id` FROM `magic_games` WHERE (`creator_account_id` = ". $_SESSION["id"] ." OR `oppenent_account_id` = ". $_SESSION["id"] .")AND `active` = 1;");
-	$data	= mysql_fetch_array($req);
+	$req		= query("SELECT `id` FROM `magic_games` WHERE (`creator_account_id` = ". $_SESSION["id"] ." OR `oppenent_account_id` = ". $_SESSION["id"] .")AND `active` = 1;");
+	$data		= mysql_fetch_array($req);
 	$_POST["game_id"]	= $data["id"];
+	
+	$req		= query("SELECT * FROM `magic_decks` WHERE `id` = ". $_POST["deck_id"] .";");
+	$data		= mysql_fetch_array($req);
+	
+	
+	$deck		= $data["cards"];
+	$deckname	= $data["title"];
 }
 
 close($link);
@@ -26,18 +33,19 @@ close($link);
 	<link rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="game.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<script type="text/javascript" src="jquery-ui-1.10.3.custom.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function()
 	{
 		var sending			= true;
 		var account_id		= <?=$_SESSION["id"]?>;
 		var	game_id			= <?=$_POST["game_id"]?>;
+		var deck 			= "<?=$deck?>";
+		
 		var logInterval;
 		var statusInterval;
 		
-		
 		updateLoop();
+		
 		
 		function updateLoop()
 		{
@@ -138,10 +146,13 @@ close($link);
 			<a href="gamelist.php"><input type="submit" name="new" class="dark" value="Quitter la partie" /></a>
 			
 			<div class="gameboard">
-			
+				<div class="hand"><div class="handcard"></div></div>
+				<?php for ($i = 0; $i < 60; $i++) echo "<div class=\"cardbox\"></div>"; ?>
+				<div class="hand"><div class="handcard"></div><div class="handcard"></div><div class="handcard"></div><div class="handcard"></div></div>
 			</div>
 			
-			<ul id="log"></ul>
+			<ul id="log">
+			</ul>
 			
 			<form method="post" action="game.php">
 				<input type="text" name="chat" />

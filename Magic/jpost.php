@@ -81,14 +81,14 @@ if (isset($_POST["action"]))
 		
 			if (!mysql_num_rows(query("SELECT * FROM `magic_game_status` WHERE `game_id` = ". $_POST["game_id"] ." AND `account_id` = ". $_SESSION["id"] .";")))
 			{
-				query("INSERT INTO `magic_logs` (`game_id`, `account_id`, `log_type`, `log`) VALUES (". $_POST["game_id"] .", ". $_SESSION["id"] .", \"game\", \"". $_SESSION["id"] ." a rejoint la partie\");");
+				query("INSERT INTO `magic_logs` (`game_id`, `account_id`, `log_type`, `log`) VALUES (". $_POST["game_id"] .", ". $_SESSION["id"] .", \"game\", \"". $_SESSION["login"] ." a rejoint la partie\");");
 				query("INSERT INTO `magic_game_status` (`game_id`, `account_id`) VALUES (". $_POST["game_id"] .", ". $_SESSION["id"] .");");
 			}
 			
-			$req1	= query("SELECT * FROM `magic_game_status` WHERE `game_id` = ". $_POST["game_id"] ." AND TIMESTAMPDIFF(SECOND, `date`, CURRENT_TIMESTAMP) > 3;");
+			$req1	= query("SELECT * FROM `magic_game_status` INNER JOIN `magic_accounts` ON `magic_game_status`.`accounts_id` = `magic_accounts`.`id` WHERE `game_id` = ". $_POST["game_id"] ." AND TIMESTAMPDIFF(SECOND, `date`, CURRENT_TIMESTAMP) > 3;");
 			while ($data1 = mysql_fetch_array($req1))
 			{
-				query("INSERT INTO `magic_logs` (`game_id`, `account_id`, `log_type`, `log`) VALUES (". $data1["game_id"] .", ". $data1["account_id"] .", \"game\", \"". $data1["account_id"] ." à quitté la partie\");");
+				query("INSERT INTO `magic_logs` (`game_id`, `account_id`, `log_type`, `log`) VALUES (". $data1["game_id"] .", ". $data1["account_id"] .", \"game\", \"". $data1["login"] ." à quitté la partie\");");
 				query("DELETE FROM `magic_game_status` WHERE `id` = ". $data1["id"] .";");
 				
 				if ($req2 = query("SELECT * FROM `magic_games` WHERE `id` = ". $data1["game_id"] ." AND (`creator_account_id` = ". $data1["account_id"] ." OR `oppenent_account_id` = ". $data1["account_id"] .");"))

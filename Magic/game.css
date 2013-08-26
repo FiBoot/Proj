@@ -1,8 +1,8 @@
-
 div.gameboard {
-	width:696px;
-	height:500px;
+	width:680px;
+	height:624px;
 	margin:20px auto;
+	padding:4px;
 	border:2px solid #333;
 	border-radius:4px;
 	background-color: #999;
@@ -49,3 +49,39 @@ span { font-size:12px; }
 .good { color:#0C0;}
 .normal { color:#FE0; }
 .bad { color:#C00; }
+
+
+/* gameboard */
+.hand {
+	float:left;
+	width:100%;
+	height:62px;
+	margin:2px auto;
+	text-align:center;
+}
+.handcard {
+	float:left;
+	width:45px;
+	height:62px;
+	margin:0 auto;
+	border-radius:3px;
+background:#BBB;
+}
+.cardbox {
+	float:left;
+	width:56px;
+	height:78px;
+	margin:2px 6px;
+	border-radius:4px;
+background:#AAA;
+}
+
+.card {
+	width:56px;
+	height:78px;
+}
+.card  img {
+	width:56px;
+	height:78px;
+	border-radius:4px;
+}

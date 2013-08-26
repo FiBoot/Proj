@@ -1,14 +1,8 @@
 <?php
 session_start();
-include_once "sql.php";
 
 if (!isset($_SESSION["id"])) { header('Location: index.php'); }
 
-$link		= bdd_connect();
-
-$req 		= query("SELECT * FROM `magic_games` WHERE `active` = 1;");
-
-close($link);
 ?>
 
 <head>
@@ -31,6 +25,7 @@ close($link);
 				action:	"update_status"
 			}).done(function(data)
 			{
+				// ping
 			});
 		}
 	
