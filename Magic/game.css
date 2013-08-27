@@ -1,12 +1,32 @@
+/* gameboard */
 div.gameboard {
+	float:left;
 	width:680px;
-	height:624px;
 	margin:20px auto;
-	padding:4px;
+	padding:8px;
 	border:2px solid #333;
 	border-radius:4px;
-	background-color: #999;
+	background:#AAA;
 }
+/*
+	width:60px;
+	height:83px;
+*/
+td {
+	min-width:60px;
+	height:83px;
+	padding:2px;
+	border:1px dotted #333;
+	border-radius:4px;
+	text-align:center;
+}
+
+td img {
+	width:60px;
+	height:83px;
+	border-radius:4px;
+}
+/* !gameboard */
 
 ul#log {
 	width:698px;
@@ -34,7 +54,7 @@ li.log {
 input { display:inline; }
 input[type=submit] { margin:0; }
 input[name=chat] {
-	width:540px;
+	width:539px; /* 1px ff */
 	margin-right:6px;
 }
 
@@ -50,38 +70,7 @@ span { font-size:12px; }
 .normal { color:#FE0; }
 .bad { color:#C00; }
 
-
-/* gameboard */
-.hand {
-	float:left;
-	width:100%;
-	height:62px;
-	margin:2px auto;
-	text-align:center;
-}
-.handcard {
-	float:left;
-	width:45px;
-	height:62px;
-	margin:0 auto;
-	border-radius:3px;
-background:#BBB;
-}
-.cardbox {
-	float:left;
-	width:56px;
-	height:78px;
-	margin:2px 6px;
-	border-radius:4px;
-background:#AAA;
-}
-
-.card {
-	width:56px;
-	height:78px;
-}
-.card  img {
-	width:56px;
-	height:78px;
-	border-radius:4px;
-}
+/*
+223 -> 60
+310 -> 83
+*/

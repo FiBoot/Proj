@@ -5,7 +5,7 @@
 }
 .searchfield input[name=cardname] {
 	display:inline;
-	width:223px;
+	width:222px; /* 1px ff */
 	margin:7px 15px 0 0;
 	padding:0 5px;
 	color:#F93;

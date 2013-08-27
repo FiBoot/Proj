@@ -146,9 +146,35 @@ close($link);
 			<a href="gamelist.php"><input type="submit" name="new" class="dark" value="Quitter la partie" /></a>
 			
 			<div class="gameboard">
-				<div class="hand"><div class="handcard"></div></div>
-				<?php for ($i = 0; $i < 60; $i++) echo "<div class=\"cardbox\"></div>"; ?>
-				<div class="hand"><div class="handcard"></div><div class="handcard"></div><div class="handcard"></div><div class="handcard"></div></div>
+				<table>
+					<tr><td class="hand" colspan="10"></td></tr>
+					<tr>
+						<td class="deck"></td>
+						<?php for($i = 0; $i < 9; $i++) { ?><td></td><?php } ?>
+					</tr>
+					<tr>
+						<td class="graveward"></td>
+						<?php for($i = 0; $i < 9; $i++) { ?><td></td><?php } ?>
+					</tr>
+						<td class="exil"></td>
+						<?php for($i = 0; $i < 9; $i++) { ?><td></td><?php } ?>
+					<tr>
+					</tr>
+						<tr class="versus"></tr>
+					<tr>
+						<td class="exil"></td>
+						<?php for($i = 0; $i < 9; $i++) { ?><td></td><?php } ?>
+					</tr>
+					<tr>
+						<td class="graveward"></td>
+						<?php for($i = 0; $i < 9; $i++) { ?><td></td><?php } ?>
+					</tr>
+					<tr>
+						<td class="deck"></td>
+						<?php for($i = 0; $i < 9; $i++) { ?><td></td><?php } ?>
+					</tr>
+					<tr class="hand"><td class="hand" colspan="10"></td></tr>
+				</table>
 			</div>
 			
 			<ul id="log">
